@@ -9,6 +9,11 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    private let trackerStore = TrackerDataStore()
+    private let trackerRecordService = TrackerRecordService()
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"

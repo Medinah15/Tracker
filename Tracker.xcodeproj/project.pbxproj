@@ -14,7 +14,7 @@
 		8B8EFD152DF9BB7200F0C750 /* Exceptions for "Tracker" folder in "Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = 8B8EFD022DF9BB7000F0C750 /* Tracker */;
 		};
