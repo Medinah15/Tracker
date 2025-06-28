@@ -13,7 +13,17 @@ final class TrackersViewController: UIViewController {
     private var completedTrackers: [TrackerRecord] = []
     private let trackerStore = TrackerDataStore()
     private let trackerRecordService = TrackerRecordService()
+    private let datePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .compact
+        picker.locale = Locale(identifier: "ru_RU")
+        picker.tintColor = .black // цвет текста/иконки календаря
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        return picker
+    }()
 
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
@@ -29,7 +39,7 @@ final class TrackersViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        let imageView = UIImageView(image: UIImage(named: "trackers_placeholder")) // добавь картинку в Assets
+        let imageView = UIImageView(image: UIImage(named: "trackers_placeholder"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
         let label = UILabel()
@@ -74,6 +84,9 @@ final class TrackersViewController: UIViewController {
             target: self,
             action: #selector(didTapAdd)
         )
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
     }
     
     private func setupSearchController() {
@@ -97,4 +110,24 @@ final class TrackersViewController: UIViewController {
     @objc private func didTapAdd() {
         print("Нажата кнопка +")
     }
-}
+    
+    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        print("Выбранная дата: \(formattedDate)")
+        let calendar = Calendar.current
+        let weekdayIndex = calendar.component(.weekday, from: selectedDate) // Воскресенье = 1
+
+           // Преобразуем в WeekDay
+        guard let weekDay = WeekDay.fromCalendarIndex(weekdayIndex) else { return }
+
+           // Получаем трекеры на этот день
+        let filteredTrackers = trackerStore.getTrackers(for: weekDay)
+
+           // Обновляем UI или collectionView
+        print("Показать трекеры на \(weekDay): \(filteredTrackers.count)")
+       }
+    }
+
