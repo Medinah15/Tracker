@@ -155,9 +155,9 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAdd() {
-        let newTrackerVC = NewHabitViewController()
-        let navController = UINavigationController(rootViewController: newTrackerVC)
-        present(navController, animated: true)
+        let newHabitVC = NewHabitViewController()
+        let nav = UINavigationController(rootViewController: newHabitVC)
+        present(nav, animated: true)
     }
 }
 

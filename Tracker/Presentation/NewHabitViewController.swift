@@ -90,8 +90,9 @@ final class NewHabitViewController: UIViewController {
     
     func updateSchedule(_ days: [WeekDay]) {
         selectedSchedule = days
+        scheduleValueLabel.text = days.map { $0.shortTitle }.joined(separator: ", ")
     }
-    
+
     // MARK: - Private Methods
     
     private func setupUI() {
@@ -203,6 +204,9 @@ final class NewHabitViewController: UIViewController {
     }
     
     @objc private func didTapSchedule() {
+        let scheduleVC = ScheduleViewController()
+        scheduleVC.delegate = self
+        navigationController?.pushViewController(scheduleVC, animated: true)
     }
     
     @objc private func didTapCancel() {
@@ -213,3 +217,13 @@ final class NewHabitViewController: UIViewController {
         print("Создать трекер")
     }
 }
+
+// MARK: - ScheduleViewControllerDelegate
+
+extension NewHabitViewController: ScheduleViewControllerDelegate {
+    func scheduleViewController(_ viewController: ScheduleViewController, didSelectDays selectedDays: [WeekDay]) {
+        self.selectedSchedule = selectedDays
+        scheduleValueLabel.text = selectedDays.map { $0.shortTitle }.joined(separator: ", ")
+    }
+}
+
