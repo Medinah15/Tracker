@@ -8,7 +8,12 @@
 import  UIKit
 
 final class TrackerHeaderView: UICollectionReusableView {
+    
+    // MARK: - Public Properties
+    
     static let reuseIdentifier = "TrackerHeaderView"
+    
+    // MARK: - Private UI Elements
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -18,8 +23,26 @@ final class TrackerHeaderView: UICollectionReusableView {
         return label
     }()
     
+    // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Public Methods
+    
+    func configure(title: String) {
+        titleLabel.text = title
+    }
+    
+    // MARK: - Private Methods
+    
+    private func setupUI() {
         addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
@@ -28,13 +51,5 @@ final class TrackerHeaderView: UICollectionReusableView {
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure(title: String) {
-        titleLabel.text = title
     }
 }

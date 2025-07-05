@@ -7,9 +7,13 @@
 
 import UIKit
 
-// TrackerRecordService.swift
 final class TrackerRecordService {
+    
+    // MARK: - Public Properties
+    
     private(set) var completedTrackers: [TrackerRecord] = []
+    
+    // MARK: - Public Methods
     
     func addRecord(for trackerId: UUID, on date: Date) {
         completedTrackers.append(TrackerRecord(trackerId: trackerId, date: date))

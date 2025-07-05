@@ -7,7 +7,12 @@
 
 import UIKit
 
+// MARK: - TrackersViewController
+
 final class TrackersViewController: UIViewController {
+    
+    // MARK: - Private Properties
+    
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var selectedDate = Date()
@@ -70,6 +75,8 @@ final class TrackersViewController: UIViewController {
         return view
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -83,6 +90,8 @@ final class TrackersViewController: UIViewController {
         setupPlaceholderView()
         reloadVisibleCategories()
     }
+    
+    // MARK: - Private Methods
     
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAdd))
@@ -120,15 +129,6 @@ final class TrackersViewController: UIViewController {
         placeholderView.isHidden = true
     }
     
-    @objc private func dateChanged() {
-        selectedDate = datePicker.date
-        reloadVisibleCategories()
-    }
-    
-    @objc private func didTapAdd() {
-        print("+ Add tracker tapped")
-    }
-    
     private func reloadVisibleCategories() {
         let calendar = Calendar.current
         let weekdayIndex = calendar.component(.weekday, from: selectedDate)
@@ -146,7 +146,22 @@ final class TrackersViewController: UIViewController {
         placeholderView.isHidden = !categories.isEmpty
         collectionView.reloadData()
     }
+    
+    // MARK: - IBAction
+    
+    @objc private func dateChanged() {
+        selectedDate = datePicker.date
+        reloadVisibleCategories()
+    }
+    
+    @objc private func didTapAdd() {
+        let newTrackerVC = NewHabitViewController()
+        let navController = UINavigationController(rootViewController: newTrackerVC)
+        present(navController, animated: true)
+    }
 }
+
+// MARK: - UISearchBarDelegate
 
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -159,6 +174,8 @@ extension TrackersViewController: UISearchBarDelegate {
         reloadVisibleCategories()
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -217,6 +234,8 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (collectionView.bounds.width - 41) / 2, height: 148)
@@ -240,11 +259,5 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
         return CGSize(width: collectionView.bounds.width-226, height: 18) // или высота по Figma
-    }
-}
-
-extension Calendar {
-    func isDateInFuture(_ date: Date) -> Bool {
-        return date > startOfDay(for: Date())
     }
 }

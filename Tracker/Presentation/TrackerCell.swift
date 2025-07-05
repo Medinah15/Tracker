@@ -8,7 +8,13 @@
 import UIKit
 
 final class TrackerCell: UICollectionViewCell {
+    
+    // MARK: - Public Properties
+    
     static let reuseIdentifier = "TrackerCell"
+    var onTap: (() -> Void)?
+    
+    // MARK: - Private UI Elements
     
     private let backgroundCardView = UIView()
     private let emojiBackgroundView = UIView()
@@ -17,7 +23,7 @@ final class TrackerCell: UICollectionViewCell {
     private let counterLabel = UILabel()
     private let actionButton = UIButton(type: .system)
     
-    var onTap: (() -> Void)?
+    // MARK: - Initializers
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,6 +34,8 @@ final class TrackerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    
     func configure(title: String, emoji: String, color: UIColor, isCompleted: Bool, count: Int) {
         backgroundCardView.backgroundColor = color
         emojiBackgroundView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.3)
@@ -37,6 +45,8 @@ final class TrackerCell: UICollectionViewCell {
         counterLabel.text = "\(count) дней"
         updateButtonAppearance(isCompleted: isCompleted, color: color)
     }
+    
+    // MARK: - Private Methods
     
     private func setupUI() {
         contentView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
@@ -108,6 +118,8 @@ final class TrackerCell: UICollectionViewCell {
         actionButton.setImage(image, for: .normal)
         actionButton.backgroundColor = color
     }
+    
+    // MARK: - Actions
     
     @objc private func buttonTapped() {
         onTap?()
