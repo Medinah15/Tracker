@@ -7,17 +7,21 @@
 
 import UIKit
 
-// MARK: - NewHabitViewController
-
-final class NewHabitViewController: UIViewController {
+final class NewHabitViewController: UIViewController, ScheduleViewControllerDelegate {
+    
+    // MARK: - Public Properties
+    
+    var onCreate: ((Tracker) -> Void)?
     
     // MARK: - Private Properties
     
-    private var selectedCategory: String? = nil
+    private var selectedCategory: String?
     private var selectedSchedule: [WeekDay] = []
     
     private let categoryValueLabel = UILabel()
     private let scheduleValueLabel = UILabel()
+    private var categoryTitleTopConstraint: NSLayoutConstraint?
+    private var scheduleTitleTopConstraint: NSLayoutConstraint?
     
     private let nameTextField: UITextField = {
         let textField = UITextField()
@@ -66,6 +70,7 @@ final class NewHabitViewController: UIViewController {
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isEnabled = false
         return button
     }()
     
@@ -79,21 +84,51 @@ final class NewHabitViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupActions()
+        validateInput()
     }
     
-    // MARK: - Public Methods
+    // MARK: - Public Methods (ScheduleViewControllerDelegate)
     
-    func updateCategory(_ category: String) {
+    func scheduleViewController(_ viewController: ScheduleViewController, didSelectDays selectedDays: [WeekDay]) {
+        updateSchedule(selectedDays)
+    }
+    
+    // MARK: - Private Methods
+    
+    func updateCategory(_ category: String?) {
         selectedCategory = category
+        let isEmpty = category?.isEmpty ?? true
         categoryValueLabel.text = category
+        categoryValueLabel.isHidden = isEmpty
+        categoryTitleTopConstraint?.constant = isEmpty ? 27 : 15
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+        validateInput()
     }
     
     func updateSchedule(_ days: [WeekDay]) {
         selectedSchedule = days
-        scheduleValueLabel.text = days.map { $0.shortTitle }.joined(separator: ", ")
+        let allDays = Set(WeekDay.allCases)
+        let selectedDaysSet = Set(days)
+        
+        let text: String
+        if selectedDaysSet == allDays {
+            text = "Каждый день"
+        } else {
+            text = days.map { $0.shortTitle }.joined(separator: ", ")
+        }
+        
+        scheduleValueLabel.text = text
+        let isEmpty = text.isEmpty
+        scheduleValueLabel.isHidden = isEmpty
+        scheduleTitleTopConstraint?.constant = isEmpty ? 27 : 15
+        
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+        validateInput()
     }
-
-    // MARK: - Private Methods
     
     private func setupUI() {
         view.addSubview(nameTextField)
@@ -178,8 +213,10 @@ final class NewHabitViewController: UIViewController {
         containerView.addSubview(valueLabel)
         containerView.addSubview(arrowImageView)
         
+        let topConstraint = titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 27)
+        topConstraint.isActive = true
+        
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 15),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             
             valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
@@ -190,22 +227,50 @@ final class NewHabitViewController: UIViewController {
             arrowImageView.widthAnchor.constraint(equalToConstant: 11),
             arrowImageView.heightAnchor.constraint(equalToConstant: 16)
         ])
+        
+        if containerView == categoryView {
+            categoryTitleTopConstraint = topConstraint
+        } else if containerView == scheduleView {
+            scheduleTitleTopConstraint = topConstraint
+        }
     }
     
     private func setupActions() {
         cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
         createButton.addTarget(self, action: #selector(didTapCreate), for: .touchUpInside)
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
-    // MARK: - IBActions
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        validateInput()
+    }
+    
+    private func validateInput() {
+        let isNameFilled = !(nameTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
+        let isCategorySelected = selectedCategory != nil && !(selectedCategory?.isEmpty ?? true)
+        let isScheduleSelected = !selectedSchedule.isEmpty
+        
+        createButton.isEnabled = isNameFilled && isCategorySelected && isScheduleSelected
+        
+        if createButton.isEnabled {
+            createButton.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1)
+            createButton.setTitleColor(.white, for: .normal)
+        } else {
+            createButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+            createButton.setTitleColor(.white, for: .normal)
+        }
+    }
     
     @objc private func didTapCategory() {
-        print("Открыть экран выбора категории")
+        print("Выбор категории пока не реализован")
+        let tempCategory = "Без категории"
+        updateCategory(tempCategory)
     }
     
     @objc private func didTapSchedule() {
         let scheduleVC = ScheduleViewController()
         scheduleVC.delegate = self
+        scheduleVC.selectedDays = Set(selectedSchedule)
         navigationController?.pushViewController(scheduleVC, animated: true)
     }
     
@@ -214,16 +279,20 @@ final class NewHabitViewController: UIViewController {
     }
     
     @objc private func didTapCreate() {
-        print("Создать трекер")
-    }
-}
-
-// MARK: - ScheduleViewControllerDelegate
-
-extension NewHabitViewController: ScheduleViewControllerDelegate {
-    func scheduleViewController(_ viewController: ScheduleViewController, didSelectDays selectedDays: [WeekDay]) {
-        self.selectedSchedule = selectedDays
-        scheduleValueLabel.text = selectedDays.map { $0.shortTitle }.joined(separator: ", ")
+        guard createButton.isEnabled else { return }
+        guard let name = nameTextField.text, !name.isEmpty else { return }
+        guard let category = selectedCategory, !category.isEmpty else { return }
+        
+        let newTracker = Tracker(
+            id: UUID(),
+            title: name,
+            color: .systemBlue,
+            emoji: "🔥",
+            schedule: selectedSchedule
+        )
+        
+        onCreate?(newTracker)
+        dismiss(animated: true)
     }
 }
 

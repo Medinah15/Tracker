@@ -4,20 +4,12 @@
 //
 //  Created by Medina Huseynova on 13.06.25.
 //
-
 import UIKit
 
-// MARK: - TrackersViewController
-
 final class TrackersViewController: UIViewController {
-    
-    // MARK: - Private Properties
-    
     private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
     private var selectedDate = Date()
     private var searchText: String = ""
-    
     private let trackerStore = TrackerDataStore()
     private let trackerRecordService = TrackerRecordService()
     
@@ -69,13 +61,11 @@ final class TrackersViewController: UIViewController {
             imageView.heightAnchor.constraint(equalToConstant: 80),
             
             label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            label.centerXAnchor.constraint(equalTo:imageView.centerXAnchor)
+            label.centerXAnchor.constraint(equalTo: imageView.centerXAnchor)
         ])
         
         return view
     }()
-    
-    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,10 +81,9 @@ final class TrackersViewController: UIViewController {
         reloadVisibleCategories()
     }
     
-    // MARK: - Private Methods
-    
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAdd))
+        navigationItem.leftBarButtonItem?.tintColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
     }
@@ -147,8 +136,6 @@ final class TrackersViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    // MARK: - IBAction
-    
     @objc private func dateChanged() {
         selectedDate = datePicker.date
         reloadVisibleCategories()
@@ -156,6 +143,11 @@ final class TrackersViewController: UIViewController {
     
     @objc private func didTapAdd() {
         let newHabitVC = NewHabitViewController()
+        newHabitVC.onCreate = { [weak self] tracker in
+            guard let self = self else { return }
+            self.trackerStore.addTracker(tracker, toCategoryTitle: tracker.title)
+            self.reloadVisibleCategories()
+        }
         let nav = UINavigationController(rootViewController: newHabitVC)
         present(nav, animated: true)
     }
@@ -187,39 +179,42 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCell.reuseIdentifier, for: indexPath) as! TrackerCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCell.reuseIdentifier, for: indexPath) as? TrackerCell else {
+            return UICollectionViewCell()
+        }
+        
+        guard categories.indices.contains(indexPath.section),
+              categories[indexPath.section].trackers.indices.contains(indexPath.item) else {
+            return cell 
+        }
         
         let tracker = categories[indexPath.section].trackers[indexPath.item]
-        let count = completedTrackers.filter { $0.trackerId == tracker.id }.count
         let isCompleted = trackerRecordService.isCompleted(tracker.id, on: selectedDate)
+        let count = trackerRecordService.completedTrackers.filter { $0.trackerId == tracker.id }.count
         
-        cell.configure(title: tracker.title, emoji: tracker.emoji,color: tracker.color, isCompleted: isCompleted, count: count)
+        cell.configure(title: tracker.title, emoji: tracker.emoji, color: tracker.color, isCompleted: isCompleted, count: count)
+        
         cell.onTap = { [weak self] in
             guard let self = self else { return }
             if Calendar.current.isDateInFuture(self.selectedDate) { return }
             
-            if isCompleted {
-                trackerRecordService.removeRecord(for: tracker.id, on: selectedDate)
+            let currentlyCompleted = self.trackerRecordService.isCompleted(tracker.id, on: self.selectedDate)
+            if currentlyCompleted {
+                self.trackerRecordService.removeRecord(for: tracker.id, on: self.selectedDate)
             } else {
-                trackerRecordService.addRecord(for: tracker.id, on: selectedDate)
+                self.trackerRecordService.addRecord(for: tracker.id, on: self.selectedDate)
             }
             
-            self.completedTrackers = trackerRecordService.completedTrackers
             self.collectionView.reloadItems(at: [indexPath])
         }
         
         return cell
     }
     
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader else {
             return UICollectionReusableView()
         }
-        
         guard let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: TrackerHeaderView.reuseIdentifier,
@@ -227,7 +222,6 @@ extension TrackersViewController: UICollectionViewDataSource {
         ) as? TrackerHeaderView else {
             return UICollectionReusableView()
         }
-        
         let categoryTitle = categories[indexPath.section].title
         header.configure(title: categoryTitle)
         return header
@@ -253,11 +247,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return 9
     }
     
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        referenceSizeForHeaderInSection section: Int
-    ) -> CGSize {
-        return CGSize(width: collectionView.bounds.width-226, height: 18) // или высота по Figma
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width - 226, height: 18)
     }
 }

@@ -4,16 +4,10 @@
 //
 //  Created by Medina Huseynova on 26.06.25.
 //
-
-import UIKit
+import Foundation
 
 final class TrackerRecordService {
-    
-    // MARK: - Public Properties
-    
     private(set) var completedTrackers: [TrackerRecord] = []
-    
-    // MARK: - Public Methods
     
     func addRecord(for trackerId: UUID, on date: Date) {
         completedTrackers.append(TrackerRecord(trackerId: trackerId, date: date))
@@ -31,4 +25,3 @@ final class TrackerRecordService {
         }
     }
 }
-

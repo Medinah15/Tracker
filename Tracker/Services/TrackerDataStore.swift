@@ -4,21 +4,26 @@
 //
 //  Created by Medina Huseynova on 26.06.25.
 //
-
 import UIKit
 
 final class TrackerDataStore {
-    
-    // MARK: - Public Properties
-    
     private(set) var categories: [TrackerCategory] = []
     
-    // MARK: - Public Methods
-    
-    func add(_ tracker: Tracker, to categoryTitle: String) {
+    init() {
+        categories = []
     }
     
-    func getTrackers(for weekday: WeekDay) -> [Tracker] {
-        return []
+    func addTracker(_ tracker: Tracker, toCategoryTitle categoryTitle: String) {
+        if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
+            let oldCategory = categories[index]
+            let newTrackers = oldCategory.trackers + [tracker]
+            let newCategory = TrackerCategory(title: oldCategory.title, trackers: newTrackers)
+            var newCategories = categories
+            newCategories[index] = newCategory
+            categories = newCategories
+        } else {
+            let newCategory = TrackerCategory(title: categoryTitle, trackers: [tracker])
+            categories.append(newCategory)
+        }
     }
 }

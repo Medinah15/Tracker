@@ -9,7 +9,14 @@ import Foundation
 
 extension Calendar {
     func isDateInFuture(_ date: Date) -> Bool {
-        return date > startOfDay(for: Date())
+        return date > Date().startOfDay
     }
 }
+
+extension Date {
+    var startOfDay: Date {
+        return Calendar.current.startOfDay(for: self)
+    }
+}
+
 

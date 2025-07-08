@@ -23,7 +23,7 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private var selectedDays: Set<WeekDay> = []
+    var selectedDays: Set<WeekDay> = []
     
     private let contentContainer: UIView = {
         let view = UIView()
@@ -121,7 +121,7 @@ final class ScheduleViewController: UIViewController {
         container.backgroundColor = .clear
         
         let label = UILabel()
-        label.text = dayDisplayName(day)
+        label.text = day.displayName
         label.translatesAutoresizingMaskIntoConstraints = false
         
         let toggle = UISwitch()
@@ -152,20 +152,8 @@ final class ScheduleViewController: UIViewController {
         return separator
     }
     
-    private func dayDisplayName(_ day: WeekDay) -> String {
-        switch day {
-        case .monday: return "Понедельник"
-        case .tuesday: return "Вторник"
-        case .wednesday: return "Среда"
-        case .thursday: return "Четверг"
-        case .friday: return "Пятница"
-        case .saturday: return "Суббота"
-        case .sunday: return "Воскресенье"
-        }
-    }
-    
     private func sortWeekDays(_ a: WeekDay, _ b: WeekDay) -> Bool {
-        WeekDay.allCases.firstIndex(of: a)! < WeekDay.allCases.firstIndex(of: b)!
+        return a.sortIndex < b.sortIndex
     }
     
     // MARK: - IBActions
@@ -180,7 +168,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     @objc private func doneButtonTapped() {
-           delegate?.scheduleViewController(self, didSelectDays: Array(selectedDays).sorted(by: sortWeekDays))
-           navigationController?.popViewController(animated: true)
-       }
-   }
+        delegate?.scheduleViewController(self, didSelectDays: Array(selectedDays).sorted(by: sortWeekDays))
+        navigationController?.popViewController(animated: true)
+    }
+}
