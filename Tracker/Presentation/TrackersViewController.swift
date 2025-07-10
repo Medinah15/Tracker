@@ -7,11 +7,16 @@
 import UIKit
 
 final class TrackersViewController: UIViewController {
+    
+    // MARK: - Private Properties
+    
     private var categories: [TrackerCategory] = []
     private var selectedDate = Date()
     private var searchText: String = ""
     private let trackerStore = TrackerDataStore()
     private let trackerRecordService = TrackerRecordService()
+    
+    // MARK: - UI Elements
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -67,6 +72,8 @@ final class TrackersViewController: UIViewController {
         return view
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -80,6 +87,8 @@ final class TrackersViewController: UIViewController {
         setupPlaceholderView()
         reloadVisibleCategories()
     }
+    
+    // MARK: - Setup Methods
     
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAdd))
@@ -118,6 +127,8 @@ final class TrackersViewController: UIViewController {
         placeholderView.isHidden = true
     }
     
+    // MARK: - Data Handling
+    
     private func reloadVisibleCategories() {
         let calendar = Calendar.current
         let weekdayIndex = calendar.component(.weekday, from: selectedDate)
@@ -135,6 +146,8 @@ final class TrackersViewController: UIViewController {
         placeholderView.isHidden = !categories.isEmpty
         collectionView.reloadData()
     }
+    
+    // MARK: - Actions
     
     @objc private func dateChanged() {
         selectedDate = datePicker.date
@@ -170,6 +183,7 @@ extension TrackersViewController: UISearchBarDelegate {
 // MARK: - UICollectionViewDataSource
 
 extension TrackersViewController: UICollectionViewDataSource {
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return categories.count
     }
@@ -185,7 +199,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         guard categories.indices.contains(indexPath.section),
               categories[indexPath.section].trackers.indices.contains(indexPath.item) else {
-            return cell 
+            return cell
         }
         
         let tracker = categories[indexPath.section].trackers[indexPath.item]
