@@ -389,11 +389,14 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         guard let name = nameTextField.text, !name.isEmpty else { return }
         guard let category = selectedCategory, !category.isEmpty else { return }
         
+        guard let emojiIndex = selectedEmojiIndex else { return }
+        guard let colorIndex = selectedColorIndex else { return }
+        
         let newTracker = Tracker(
             id: UUID(),
             title: name,
-            color: .systemBlue,
-            emoji: "🔥",
+            color: colors[colorIndex.item],
+            emoji: emojis[emojiIndex.item],
             schedule: selectedSchedule
         )
         

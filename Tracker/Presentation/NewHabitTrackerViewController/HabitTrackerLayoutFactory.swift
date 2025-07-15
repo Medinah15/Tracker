@@ -50,4 +50,3 @@ enum HabitTrackerLayoutFactory {
                                                            alignment: .top)
     }
 }
-

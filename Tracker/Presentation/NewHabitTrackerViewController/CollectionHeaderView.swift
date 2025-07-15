@@ -52,4 +52,3 @@ class CollectionHeaderView: UICollectionReusableView {
         titleLabel.text = title
     }
 }
-

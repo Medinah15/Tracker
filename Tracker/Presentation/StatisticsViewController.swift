@@ -13,4 +13,3 @@ final class StatisticsViewController: UIViewController {
         view.backgroundColor = .systemBackground
     }
 }
-

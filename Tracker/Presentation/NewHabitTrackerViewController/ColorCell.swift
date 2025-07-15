@@ -84,4 +84,3 @@ final class ColorCell: UICollectionViewCell {
         }
     }
 }
-

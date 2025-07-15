@@ -8,31 +8,44 @@
 import CoreData
 
 final class PersistenceController {
+    
+    // MARK: - Public properties
+    
     static let shared = PersistenceController()
     
+    var viewContext: NSManagedObjectContext {
+        container.viewContext
+    }
+    
+    // MARK: - Private properties
     
     lazy var container: NSPersistentContainer = {
-        
         let container = NSPersistentContainer(name: "TrackerModel")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        
+        let description = container.persistentStoreDescriptions.first
+        description?.shouldMigrateStoreAutomatically = true
+        description?.shouldInferMappingModelAutomatically = true
+        
+        container.loadPersistentStores { storeDescription, error in
             if let error = error as NSError? {
-                
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                print("Unresolved error loading persistent stores: \(error), \(error.userInfo)")
             }
-        })
+        }
+        
         return container
     }()
     
-    func saveContext () {
+    // MARK: - Public methods
+    
+    func saveContext() throws {
         let context = container.viewContext
         if context.hasChanges {
             do {
                 try context.save()
             } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                print("Failed to save context: \(error.localizedDescription)")
+                throw error
             }
         }
     }
 }
-

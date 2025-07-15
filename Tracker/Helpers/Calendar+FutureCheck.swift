@@ -18,5 +18,3 @@ extension Date {
         return Calendar.current.startOfDay(for: self)
     }
 }
-
-

@@ -4,9 +4,8 @@
 //
 //  Created by Medina Huseynova on 11.06.25.
 //
-
-import UIKit
 import CoreData
+import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
