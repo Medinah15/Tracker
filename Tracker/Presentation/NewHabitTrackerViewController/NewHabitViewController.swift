@@ -458,12 +458,23 @@ extension NewHabitViewController: UICollectionViewDelegate {
         if collectionView == emojiCollectionView {
             let prev = selectedEmojiIndex
             selectedEmojiIndex = indexPath
-            collectionView.reloadItems(at: [indexPath] + (prev != nil ? [prev!] : []))
-        } else {
+            
+            var indexesToReload = [indexPath]
+            if let prev = prev, prev != indexPath {
+                indexesToReload.append(prev)
+            }
+            collectionView.reloadItems(at: indexesToReload)
+        } else if collectionView == colorCollectionView {
             let prev = selectedColorIndex
             selectedColorIndex = indexPath
-            collectionView.reloadItems(at: [indexPath] + (prev != nil ? [prev!] : []))
+            
+            var indexesToReload = [indexPath]
+            if let prev = prev, prev != indexPath {
+                indexesToReload.append(prev)
+            }
+            collectionView.reloadItems(at: indexesToReload)
         }
+        
         validateInput()
     }
 }

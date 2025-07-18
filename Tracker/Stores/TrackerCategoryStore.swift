@@ -10,7 +10,6 @@ import CoreData
 // MARK: - Delegate Protocol
 
 protocol TrackerCategoryStoreDelegate: AnyObject {
-    
     func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate)
 }
 

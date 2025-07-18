@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CollectionHeaderView: UICollectionReusableView {
+final class CollectionHeaderView: UICollectionReusableView {
     
     // MARK: - Public Properties
     
@@ -23,7 +23,7 @@ class CollectionHeaderView: UICollectionReusableView {
         return label
     }()
     
-    // MARK: - Initializers
+    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,6 +32,12 @@ class CollectionHeaderView: UICollectionReusableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Public Methods
+    
+    func configure(with title: String) {
+        titleLabel.text = title
     }
     
     // MARK: - Private Methods
@@ -44,11 +50,5 @@ class CollectionHeaderView: UICollectionReusableView {
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-    
-    // MARK: - Public Methods
-    
-    func configure(with title: String) {
-        titleLabel.text = title
     }
 }
