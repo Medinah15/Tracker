@@ -50,7 +50,6 @@ final class ScheduleViewController: UIViewController {
         setupView()
         setupConstraints()
         setupDayRows()
-        
     }
     
     // MARK: - Private Methods

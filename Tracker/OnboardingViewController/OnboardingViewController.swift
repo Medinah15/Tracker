@@ -8,6 +8,14 @@ import UIKit
 
 class OnboardingViewController: UIPageViewController {
     
+    init() {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Public Properties
     
     lazy var pages: [UIViewController] = {
@@ -81,6 +89,8 @@ class OnboardingViewController: UIPageViewController {
     // MARK: - IBActions
     
     @objc private func techButtonTapped() {
+        UserDefaults.standard.set(true, forKey: "isOnboardingSeen")
+        UserDefaults.standard.synchronize()
         
         let trackersVC = TrackersViewController()
         let navVC = UINavigationController(rootViewController: trackersVC)

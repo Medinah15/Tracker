@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window?.rootViewController = MainTabBarController()
         } else {
             
-            let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+            let onboardingVC = OnboardingViewController()
             let nav = UINavigationController(rootViewController: onboardingVC)
             window?.rootViewController = nav
         }
