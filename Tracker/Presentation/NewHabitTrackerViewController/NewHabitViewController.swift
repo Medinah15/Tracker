@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 final class NewHabitViewController: UIViewController, ScheduleViewControllerDelegate {
     
@@ -15,7 +16,8 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     // MARK: - Private Properties
     
-    private var selectedCategory: String?
+    var selectedCategory: TrackerCategory?
+    
     private var selectedSchedule: [WeekDay] = []
     
     private let categoryValueLabel = UILabel()
@@ -88,7 +90,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: HabitTrackerLayoutFactory.createColorLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = false // Важно: отключаем скролл коллекции
+        collectionView.isScrollEnabled = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
@@ -170,10 +172,10 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     // MARK: - Private Methods
     
-    func updateCategory(_ category: String?) {
+    func updateCategory(_ category: TrackerCategory?) {
         selectedCategory = category
-        let isEmpty = category?.isEmpty ?? true
-        categoryValueLabel.text = category
+        let isEmpty = (category?.title.isEmpty ?? true)
+        categoryValueLabel.text = category?.title
         categoryValueLabel.isHidden = isEmpty
         categoryTitleTopConstraint?.constant = isEmpty ? 27 : 15
         UIView.animate(withDuration: 0.25) {
@@ -351,7 +353,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private func validateInput() {
         let isNameFilled = !(nameTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
-        let isCategorySelected = selectedCategory != nil && !(selectedCategory?.isEmpty ?? true)
+        let isCategorySelected = selectedCategory?.title.isEmpty == false
         let isScheduleSelected = !selectedSchedule.isEmpty
         let isEmojiSelected = selectedEmojiIndex != nil
         let isColorSelected = selectedColorIndex != nil
@@ -368,9 +370,19 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     }
     
     @objc private func didTapCategory() {
-        print("Выбор категории пока не реализован")
-        let tempCategory = "Без категории"
-        updateCategory(tempCategory)
+        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistenceController.viewContext else {
+            fatalError("No NSManagedObjectContext found")
+        }
+        
+        let viewModel = CategoryViewModel(context: context)
+        viewModel.selectedCategory = self.selectedCategory 
+        
+        let categoryVC = CategoryViewController(viewModel: viewModel)
+        categoryVC.onCategorySelected = { [weak self] selectedCategory in
+            self?.selectedCategory = selectedCategory
+            self?.updateCategory(selectedCategory)
+        }
+        navigationController?.pushViewController(categoryVC, animated: true)
     }
     
     @objc private func didTapSchedule() {
@@ -387,7 +399,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     @objc private func didTapCreate() {
         guard createButton.isEnabled else { return }
         guard let name = nameTextField.text, !name.isEmpty else { return }
-        guard let category = selectedCategory, !category.isEmpty else { return }
+        guard let category = selectedCategory, !category.title.isEmpty else { return }
         
         guard let emojiIndex = selectedEmojiIndex else { return }
         guard let colorIndex = selectedColorIndex else { return }

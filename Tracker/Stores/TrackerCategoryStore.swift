@@ -20,15 +20,29 @@ struct TrackerCategoryStoreUpdate {
         let oldIndex: Int
         let newIndex: Int
     }
+    
     let insertedIndexes: IndexSet
     let deletedIndexes: IndexSet
     let updatedIndexes: IndexSet
     let movedIndexes: Set<Move>
 }
 
-// MARK: - TrackerCategoryStore class
+// MARK: - TrackerCategoryStore
 
 final class TrackerCategoryStore: NSObject {
+    
+    // MARK: - Public Properties
+    
+    weak var delegate: TrackerCategoryStoreDelegate?
+    
+    var categories: [TrackerCategory] {
+        fetchedResultsController.fetchedObjects?.map { categoryCoreData in
+            let trackersCoreData = categoryCoreData.trackers as? Set<TrackerCoreData> ?? []
+            let trackers: [Tracker] = trackersCoreData.compactMap { try? mapToTracker($0) }
+            
+            return TrackerCategory(title: categoryCoreData.title ?? "", trackers: trackers)
+        } ?? []
+    }
     
     // MARK: - Private Properties
     
@@ -40,11 +54,8 @@ final class TrackerCategoryStore: NSObject {
     private var updatedIndexes: IndexSet = []
     private var movedIndexes: Set<TrackerCategoryStoreUpdate.Move> = []
     
-    // MARK: - Public Properties
     
-    weak var delegate: TrackerCategoryStoreDelegate?
-    
-    // MARK: - Initialization
+    // MARK: - Init
     
     init(context: NSManagedObjectContext) throws {
         self.context = context
@@ -64,15 +75,15 @@ final class TrackerCategoryStore: NSObject {
         try fetchedResultsController.performFetch()
     }
     
-    // MARK: - Public API
+    // MARK: - Public Methods
     
-    var categories: [TrackerCategory] {
-        fetchedResultsController.fetchedObjects?.map { categoryCoreData in
-            let trackersCoreData = categoryCoreData.trackers as? Set<TrackerCoreData> ?? []
-            let trackers: [Tracker] = trackersCoreData.compactMap { try? mapToTracker($0) }
-            
-            return TrackerCategory(title: categoryCoreData.title ?? "", trackers: trackers)
-        } ?? []
+    func addCategory(title: String) throws {
+        if categories.contains(where: { $0.title == title }) {
+            return
+        }
+        let newCategory = TrackerCategoryCoreData(context: context)
+        newCategory.title = title
+        try context.save()
     }
     
     func addTracker(_ tracker: Tracker, toCategoryTitle categoryTitle: String) throws {
@@ -116,7 +127,19 @@ final class TrackerCategoryStore: NSObject {
         return fetchedResultsController.fetchedObjects?.first(where: { $0.title == title })
     }
     
-    // MARK: - Private Helpers
+    func deleteCategory(title: String) throws {
+        guard let category = categoryCoreData(with: title) else { return }
+        context.delete(category)
+        try context.save()
+    }
+    
+    func updateCategory(oldTitle: String, newTitle: String) throws {
+        guard let category = categoryCoreData(with: oldTitle) else { return }
+        category.title = newTitle
+        try context.save()
+    }
+    
+    // MARK: - Private Methods
     
     private func mapToTracker(_ coreData: TrackerCoreData) throws -> Tracker {
         return Tracker(
@@ -132,12 +155,12 @@ final class TrackerCategoryStore: NSObject {
         guard let data else { return [] }
         return try JSONDecoder().decode([WeekDay].self, from: data)
     }
-    
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         insertedIndexes = []
         deletedIndexes = []

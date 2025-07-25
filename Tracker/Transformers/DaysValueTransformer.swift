@@ -9,7 +9,11 @@ import Foundation
 
 @objc
 final class DaysValueTransformer: ValueTransformer {
+    
+    // MARK: - Public Methods
+    
     override class func transformedValueClass() -> AnyClass { NSData.self }
+    
     override class func allowsReverseTransformation() -> Bool { true }
     
     override func transformedValue(_ value: Any?) -> Any? {
@@ -21,6 +25,8 @@ final class DaysValueTransformer: ValueTransformer {
         guard let data = value as? NSData else { return nil }
         return try? JSONDecoder().decode([WeekDay].self, from: data as Data)
     }
+    
+    // MARK: - Public Static Methods
     
     static func register() {
         ValueTransformer.setValueTransformer(

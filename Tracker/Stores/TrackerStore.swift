@@ -7,6 +7,8 @@
 import UIKit
 import CoreData
 
+// MARK: - Delegate Protocol
+
 protocol TrackerStoreDelegate: AnyObject {
     func store(_ store: TrackerStore, didUpdate update: TrackerStoreUpdate)
 }
@@ -15,18 +17,18 @@ protocol TrackerStoreDelegate: AnyObject {
 
 final class TrackerStore: NSObject {
     
-    // MARK: - Private Properties
-    
-    private let context: NSManagedObjectContext
-    private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
-    
     // MARK: - Public Properties
     
     weak var delegate: TrackerStoreDelegate?
     
     private(set) var categories: [TrackerCategory] = []
     
-    // MARK: - Initialization
+    // MARK: - Private Properties
+    
+    private let context: NSManagedObjectContext
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
+    
+    // MARK: - Init
     
     init(context: NSManagedObjectContext) throws {
         self.context = context
@@ -81,6 +83,8 @@ final class TrackerStore: NSObject {
         ))
     }
     
+    // MARK: - Private Methods
+    
     private func updateCategories() {
         categories = fetchedResultsController.fetchedObjects?.map { categoryEntity in
             let trackers = categoryEntity.trackers?.compactMap { trackerObj -> Tracker? in
@@ -99,11 +103,12 @@ final class TrackerStore: NSObject {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
+
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         try? fetchedResultsController.performFetch()
         updateCategories()
-        // Здесь можно сделать обновление с более детальной информацией
         delegate?.store(self, didUpdate: TrackerStoreUpdate(
             insertedIndexes: [],
             deletedIndexes: [],
