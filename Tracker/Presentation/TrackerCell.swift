@@ -42,7 +42,11 @@ final class TrackerCell: UICollectionViewCell {
         titleLabel.textColor = .white
         emojiLabel.text = emoji
         titleLabel.text = title
-        counterLabel.text = "\(count) дней"
+        let localizedDays = String.localizedStringWithFormat(
+            NSLocalizedString("days_count", comment: "Number of days tracked"),
+            count
+        )
+        counterLabel.text = localizedDays
         updateButtonAppearance(isCompleted: isCompleted, color: color)
     }
     
