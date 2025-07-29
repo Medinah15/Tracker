@@ -30,14 +30,14 @@ final class MainTabBarController: UITabBarController {
     private func setupViewControllers() {
         let trackersVC = TrackersViewController()
         trackersVC.tabBarItem = UITabBarItem(
-            title: "Трекеры",
+            title:NSLocalizedString("tab.trackers.title", comment: "Tab title for trackers screen"),
             image: UIImage(systemName: "record.circle.fill"),
             tag: 0
         )
         
         let statisticsVC = StatisticsViewController()
         statisticsVC.tabBarItem = UITabBarItem(
-            title: "Статистика",
+            title: NSLocalizedString("tab.statistics.title", comment: "Tab title for statistics screen"),
             image: UIImage(systemName: "hare.fill"),
             tag: 1
         )

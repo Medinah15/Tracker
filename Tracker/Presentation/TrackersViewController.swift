@@ -50,7 +50,7 @@ final class TrackersViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("trackers_placeholder", comment: "Placeholder text shown when there are no trackers")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1)
         label.textAlignment = .center
@@ -77,7 +77,7 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Трекеры"
+        navigationItem.title = NSLocalizedString("trackers_title", comment: "Title of the Trackers screen")
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
         let context = PersistenceController.shared.container.viewContext
@@ -109,7 +109,7 @@ final class TrackersViewController: UIViewController {
     
     private func setupSearchController() {
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.placeholder = NSLocalizedString("search_placeholder", comment: "Placeholder text for the search bar")
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }

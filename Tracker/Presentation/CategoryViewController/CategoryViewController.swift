@@ -35,7 +35,7 @@ final class CategoryViewController: UIViewController {
     
     private let addCategoryButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("category.addbutton", comment: "Button title for adding a category"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
         button.layer.cornerRadius = 16
@@ -51,7 +51,7 @@ final class CategoryViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
-        label.text = "Привычки и события можно\nобъединить по смыслу"
+        label.text = NSLocalizedString("category.placeholdertext", comment: "Placeholder text when no categories are available")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1)
         label.textAlignment = .center
@@ -89,7 +89,7 @@ final class CategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Категория"
+        title = NSLocalizedString("category.title", comment: "Title for category screen")
         navigationItem.hidesBackButton = true
         view.backgroundColor = .systemBackground
         
@@ -149,9 +149,9 @@ final class CategoryViewController: UIViewController {
         guard index < viewModel.categories.count else { return }
         let categoryTitle = viewModel.categories[index].title
         
-        let alert = UIAlertController(title: "Эта категория точно не нужна", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("category.alert.title", comment: "Alert title for confirming deletion"), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("category.alert.cancel", comment: "Cancel button title in delete alert"), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("category.alert.delete", comment: "Delete button title in delete alert"), style: .destructive) { [weak self] _ in
             self?.viewModel.deleteCategory(at: index)
             self?.viewModel.fetchCategories()
         })
@@ -207,13 +207,13 @@ extension CategoryViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
-        let editAction = UIContextualAction(style: .normal, title: "Редактировать") { [weak self] _, _, done in
+        let editAction = UIContextualAction(style: .normal, title: NSLocalizedString("category.action.edit", comment: "Title for swipe-to-edit action")) { [weak self] _, _, done in
             self?.showEditCategoryAlert(for: indexPath.row)
             done(true)
         }
         editAction.backgroundColor = .systemBlue
         
-        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] _, _, done in
+        let deleteAction = UIContextualAction(style: .destructive, title: NSLocalizedString("category.action.delete", comment: "Title for swipe-to-delete action")) { [weak self] _, _, done in
             self?.showDeleteConfirmationAlert(for: indexPath.row)
             done(true)
         }
@@ -225,10 +225,10 @@ extension CategoryViewController: UITableViewDelegate {
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: nil) { _ in
-            let edit = UIAction(title: "Редактировать") { [weak self] _ in
+            let edit = UIAction(title: NSLocalizedString("category.action.edit", comment: "Edit category")) { [weak self] _ in
                 self?.showEditCategoryAlert(for: indexPath.row)
             }
-            let delete = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+            let delete = UIAction(title: NSLocalizedString("category.action.delete", comment: "Delete category"), attributes: .destructive) { [weak self] _ in
                 self?.showDeleteConfirmationAlert(for: indexPath.row)
             }
             return UIMenu(title: "", children: [edit, delete])

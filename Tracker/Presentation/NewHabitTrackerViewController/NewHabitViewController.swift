@@ -102,7 +102,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("newhabit.nameplaceholder", comment: "Placeholder for new habit name")
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
@@ -131,7 +131,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("newhabit.cancelbutton", comment: "Cancel button title"), for: .normal)
         button.setTitleColor(.systemRed, for: .normal)
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.systemRed.cgColor
@@ -142,7 +142,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private let createButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("newhabit.createbutton", comment: "Create button title"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         button.layer.cornerRadius = 16
@@ -156,7 +156,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Новая привычка"
+        title = NSLocalizedString("newhabit.title", comment: "Title of New Habit screen")
         
         setupUI()
         setupConstraints()
@@ -191,7 +191,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         
         let text: String
         if selectedDaysSet == allDays {
-            text = "Каждый день"
+            text = NSLocalizedString("newhabit.scheduleeveryday", comment: "Schedule text for every day")
         } else {
             text = days.map { $0.shortTitle }.joined(separator: ", ")
         }
@@ -225,8 +225,8 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         categoryView.translatesAutoresizingMaskIntoConstraints = false
         scheduleView.translatesAutoresizingMaskIntoConstraints = false
         
-        configureSelectionView(title: "Категория", valueLabel: categoryValueLabel, in: categoryView)
-        configureSelectionView(title: "Расписание", valueLabel: scheduleValueLabel, in: scheduleView)
+        configureSelectionView(title: NSLocalizedString("newhabit.category", comment: " "), valueLabel: categoryValueLabel, in: categoryView)
+        configureSelectionView(title: NSLocalizedString("newhabit.schedule", comment: " "), valueLabel: scheduleValueLabel, in: scheduleView)
         
         let catTap = UITapGestureRecognizer(target: self, action: #selector(didTapCategory))
         categoryView.addGestureRecognizer(catTap)
@@ -454,9 +454,9 @@ extension NewHabitViewController: UICollectionViewDataSource {
             for: indexPath) as! CollectionHeaderView
         
         if collectionView == emojiCollectionView {
-            header.configure(with: "Emoji")
+            header.configure(with: NSLocalizedString("newhabit.sectionemoji", comment: "Emoji section header"))
         } else if collectionView == colorCollectionView {
-            header.configure(with: "Цвет")
+            header.configure(with: NSLocalizedString("newhabit.sectioncolor", comment: "Color section header"))
         }
         return header
     }

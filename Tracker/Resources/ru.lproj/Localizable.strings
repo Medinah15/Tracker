@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Medina Huseynova on 29.07.25.
+  
+*/
+
+"trackers_title" = "Трекеры";
+"search_placeholder" = "Поиск";
+"trackers_placeholder" = "Что будем отслеживать?";
+"done" = "Готово";
+"schedule" = "Расписание";
+"newhabit.nameplaceholder" = "Введите название трекера";
+"newhabit.title" = "Новая привычка";
+"newhabit.category" = "Категория";
+"newhabit.schedule" = "Расписание";
+"newhabit.sectionemoji" = "Emoji";
+"newhabit.sectioncolor" = "Цвет";
+"newhabit.cancelbutton" = "Отменить";
+"newhabit.createbutton" = "Создать";
+"newhabit.scheduleeveryday" = "Каждый день";
+"editcategory.placeholder" = "Введите название категории";
+"editcategory.savebutton" = "Готово";
+"editcategory.title" = "Редактирование категории";
+"category.addbutton" = "Добавить категорию";
+"category.placeholdertext" = "Привычки и события можно объединить по смыслу";
+"category.title" = "Категория";
+"category.alert.title" = "Эта категория точно не нужна";
+"category.alert.cancel" = "Отмена";
+"category.alert.delete" = "Удалить";
+"category.action.edit" = "Редактировать";
+"category.action.delete" = "Удалить";
+"newcategory.placeholder" = "Введите название категории";
+"newcategory.savebutton" = "Готово";
+"newcategory.title" = "Новая категория";
+"onboarding.page1.title" = "Отслеживайте только то, что хотите";
+"onboarding.page2.title" = "Даже если это не литры воды и йога";
+"onboarding.techbutton.title" = "Вот это технологии!";
+"weekday.short.mon" = "Пн";
+"weekday.short.tue" = "Вт";
+"weekday.short.wed" = "Ср";
+"weekday.short.thu" = "Чт";
+"weekday.short.fri" = "Пт";
+"weekday.short.sat" = "Сб";
+"weekday.short.sun" = "Вс";
+"weekday.full.mon" = "Понедельник";
+"weekday.full.tue" = "Вторник";
+"weekday.full.wed" = "Среда";
+"weekday.full.thu" = "Четверг";
+"weekday.full.fri" = "Пятница";
+"weekday.full.sat" = "Суббота";
+"weekday.full.sun" = "Воскресенье";
+"tab.trackers.title" = "Трекеры";
+"tab.statistics.title" = "Статистика";

@@ -1,0 +1,54 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Medina Huseynova on 29.07.25.
+  
+*/
+"trackers_title" = "Trackers";
+"search_placeholder" = "Search";
+"trackers_placeholder" = "What would you like to track?";
+"done" = "Done";
+"schedule" = "Schedule";
+"newhabit.nameplaceholder" = "Enter tracker name";
+"newhabit.title" = "New Habit";
+"newhabit.category" = "Category";
+"newhabit.schedule" = "Schedule";
+"newhabit.sectionemoji" = "Emoji";
+"newhabit.sectioncolor" = "Color";
+"newhabit.cancelbutton" = "Cancel";
+"newhabit.createbutton" = "Create";
+"newhabit.scheduleeveryday" = "Every day";
+"editcategory.placeholder" = "Enter category name";
+"editcategory.savebutton" = "Done";
+"editcategory.title" = "Edit Category";
+"category.addbutton" = "Add Category";
+"category.placeholdertext" = "You can group habits and events by meaning";
+"category.title" = "Category";
+"category.alert.title" = "Are you sure you don't need this category?";
+"category.alert.cancel" = "Cancel";
+"category.alert.delete" = "Delete";
+"category.action.edit" = "Edit";
+"category.action.delete" = "Delete";
+"newcategory.placeholder" = "Enter category name";
+"newcategory.savebutton" = "Done";
+"newcategory.title" = "New Category";
+"onboarding.page1.title" = "Track only what you want";
+"onboarding.page2.title" = "Even if it's not liters of water or yoga";
+"onboarding.techbutton.title" = "Now that’s technology!";
+"weekday.short.mon" = "Mon";
+"weekday.short.tue" = "Tue";
+"weekday.short.wed" = "Wed";
+"weekday.short.thu" = "Thu";
+"weekday.short.fri" = "Fri";
+"weekday.short.sat" = "Sat";
+"weekday.short.sun" = "Sun";
+"weekday.full.mon" = "Monday";
+"weekday.full.tue" = "Tuesday";
+"weekday.full.wed" = "Wednesday";
+"weekday.full.thu" = "Thursday";
+"weekday.full.fri" = "Friday";
+"weekday.full.sat" = "Saturday";
+"weekday.full.sun" = "Sunday";
+"tab.trackers.title" = "Trackers";
+"tab.statistics.title" = "Statistics";

@@ -27,13 +27,13 @@ extension WeekDay {
     
     var shortTitle: String {
         switch self {
-        case .monday:  "Пн"
-        case .tuesday:  "Вт"
-        case .wednesday:  "Ср"
-        case .thursday:  "Чт"
-        case .friday:  "Пт"
-        case .saturday:  "Сб"
-        case .sunday:  "Вс"
+        case .monday: return NSLocalizedString("weekday.short.mon", comment: "Short title for Monday")
+        case .tuesday: return NSLocalizedString("weekday.short.tue", comment: "Short title for Tuesday")
+        case .wednesday: return NSLocalizedString("weekday.short.wed", comment: "Short title for Wednesday")
+        case .thursday: return NSLocalizedString("weekday.short.thu", comment: "Short title for Thursday")
+        case .friday: return NSLocalizedString("weekday.short.fri", comment: "Short title for Friday")
+        case .saturday: return NSLocalizedString("weekday.short.sat", comment: "Short title for Saturday")
+        case .sunday: return NSLocalizedString("weekday.short.sun", comment: "Short title for Sunday")
         }
     }
 }
@@ -41,13 +41,13 @@ extension WeekDay {
 extension WeekDay {
     var displayName: String {
         switch self {
-        case .monday: return "Понедельник"
-        case .tuesday: return "Вторник"
-        case .wednesday: return "Среда"
-        case .thursday: return "Четверг"
-        case .friday: return "Пятница"
-        case .saturday: return "Суббота"
-        case .sunday: return "Воскресенье"
+        case .monday: return NSLocalizedString("weekday.full.mon", comment: "Full name of Monday")
+        case .tuesday: return NSLocalizedString("weekday.full.tue", comment: "Full name of Tuesday")
+        case .wednesday: return NSLocalizedString("weekday.full.wed", comment: "Full name of Wednesday")
+        case .thursday: return NSLocalizedString("weekday.full.thu", comment: "Full name of Thursday")
+        case .friday: return NSLocalizedString("weekday.full.fri", comment: "Full name of Friday")
+        case .saturday: return NSLocalizedString("weekday.full.sat", comment: "Full name of Saturday")
+        case .sunday: return NSLocalizedString("weekday.full.sun", comment: "Full name of Sunday")
         }
     }
     
