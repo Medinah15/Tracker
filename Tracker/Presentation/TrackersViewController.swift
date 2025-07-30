@@ -15,7 +15,8 @@ final class TrackersViewController: UIViewController {
     private var searchText: String = ""
     private var trackerStore: TrackerStore!
     private var trackerRecordStore: TrackerRecordStore!
-    
+    private var completedTrackers: [Tracker] = []
+
     // MARK: - UI Elements
     
     private let collectionView: UICollectionView = {
@@ -156,6 +157,18 @@ final class TrackersViewController: UIViewController {
         placeholderView.isHidden = !categories.isEmpty
         collectionView.reloadData()
     }
+    private func presentEdit(for tracker: Tracker, completedDays: Int) {
+        let newHabitVC = NewHabitViewController()
+        newHabitVC.selectedTracker = tracker
+        newHabitVC.isEditingTracker = true
+        // Если нужно, можно передавать completedDays в NewHabitViewController, добавь там var completedDaysCount: Int?
+        // newHabitVC.completedDaysCount = completedDays
+
+        let nav = UINavigationController(rootViewController: newHabitVC)
+        nav.modalPresentationStyle = .pageSheet // чтобы был swipe-to-dismiss
+        present(nav, animated: true)
+    }
+
     
     // MARK: - Actions
     
@@ -174,6 +187,35 @@ final class TrackersViewController: UIViewController {
         let nav = UINavigationController(rootViewController: newHabitVC)
         present(nav, animated: true)
     }
+    func didRequestEdit(for tracker: Tracker?) {
+        guard let tracker = tracker else { return }
+        // Здесь можешь добавить аналитику, если нужно
+        let completedDays = completedTrackers.filter { $0.id == tracker.id }.count
+        presentEdit(for: tracker, completedDays: completedDays)
+    }
+
+    func didRequestDelete(for tracker: Tracker?) {
+        guard let tracker = tracker else { return }
+
+        let alert = UIAlertController(
+            title: "Удалить трекер",
+            message: "Вы уверены, что хотите удалить этот трекер?",
+            preferredStyle: .actionSheet
+        )
+        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { _ in
+            do {
+                try self.trackerStore.deleteTracker(tracker)          // используем экземпляр
+                self.categories = self.trackerStore.categories        // обновляем локальный кэш
+                self.reloadVisibleCategories()                         // обновляем UI
+            } catch {
+                print("Ошибка при удалении трекера: \(error)")
+            }
+        })
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        present(alert, animated: true)
+    }
+
+
 }
 
 // MARK: - UISearchBarDelegate
@@ -269,6 +311,24 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width - 226, height: 18)
     }
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+
+        return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: nil) { [weak self] _ in
+            guard let self = self else { return nil }
+            let tracker = self.categories[indexPath.section].trackers[indexPath.item]
+
+            let editAction = UIAction(title: "Редактировать") { _ in
+                self.didRequestEdit(for: tracker)
+            }
+            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { _ in
+                self.didRequestDelete(for: tracker)
+            }
+            return UIMenu(title: "", children: [editAction, deleteAction])
+        }
+    }
+
 }
 
 extension TrackersViewController: TrackerStoreDelegate {
@@ -282,3 +342,5 @@ extension TrackersViewController: TrackerRecordStoreDelegate {
         reloadVisibleCategories()
     }
 }
+
+

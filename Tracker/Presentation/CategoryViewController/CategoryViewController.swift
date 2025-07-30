@@ -207,13 +207,13 @@ extension CategoryViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
-        let editAction = UIContextualAction(style: .normal, title: NSLocalizedString("category.action.edit", comment: "Title for swipe-to-edit action")) { [weak self] _, _, done in
+        let editAction = UIContextualAction(style: .normal, title: "Редактировать") { [weak self] _, _, done in
             self?.showEditCategoryAlert(for: indexPath.row)
             done(true)
         }
         editAction.backgroundColor = .systemBlue
         
-        let deleteAction = UIContextualAction(style: .destructive, title: NSLocalizedString("category.action.delete", comment: "Title for swipe-to-delete action")) { [weak self] _, _, done in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] _, _, done in
             self?.showDeleteConfirmationAlert(for: indexPath.row)
             done(true)
         }
@@ -225,10 +225,10 @@ extension CategoryViewController: UITableViewDelegate {
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: nil) { _ in
-            let edit = UIAction(title: NSLocalizedString("category.action.edit", comment: "Edit category")) { [weak self] _ in
+            let edit = UIAction(title: "Редактировать") { [weak self] _ in
                 self?.showEditCategoryAlert(for: indexPath.row)
             }
-            let delete = UIAction(title: NSLocalizedString("category.action.delete", comment: "Delete category"), attributes: .destructive) { [weak self] _ in
+            let delete = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
                 self?.showDeleteConfirmationAlert(for: indexPath.row)
             }
             return UIMenu(title: "", children: [edit, delete])

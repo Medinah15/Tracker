@@ -116,4 +116,20 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
             movedIndexes: []
         ))
     }
+    func deleteTracker(_ tracker: Tracker) throws {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        
+        let results = try context.fetch(fetchRequest)
+        if let trackerToDelete = results.first {
+            context.delete(trackerToDelete)
+            try context.save()
+            
+            try fetchedResultsController.performFetch()
+            updateCategories()
+            delegate?.store(self, didUpdate: TrackerStoreUpdate(insertedIndexes: [], deletedIndexes: [], updatedIndexes: [], movedIndexes: []))
+        }
+    }
+
+    
 }

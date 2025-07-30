@@ -28,8 +28,6 @@
 "category.alert.title" = "Are you sure you don't need this category?";
 "category.alert.cancel" = "Cancel";
 "category.alert.delete" = "Delete";
-"category.action.edit" = "Edit";
-"category.action.delete" = "Delete";
 "newcategory.placeholder" = "Enter category name";
 "newcategory.savebutton" = "Done";
 "newcategory.title" = "New Category";

@@ -13,7 +13,10 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     // MARK: - Public Properties
     
     var onCreate: ((Tracker) -> Void)?
-    
+    var selectedTracker: Tracker?
+    var isEditingTracker: Bool = false
+    // var completedDaysCount: Int? // если потребуется
+
     // MARK: - Private Properties
     
     var selectedCategory: TrackerCategory?
@@ -163,7 +166,14 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         setupActions()
         validateInput()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        title = isEditingTracker ? "Редактирование привычки" : "Новая привычка"
+    }
+
     // MARK: - Public Methods (ScheduleViewControllerDelegate)
     
     func scheduleViewController(_ viewController: ScheduleViewController, didSelectDays selectedDays: [WeekDay]) {

@@ -29,8 +29,6 @@
 "category.alert.title" = "Эта категория точно не нужна";
 "category.alert.cancel" = "Отмена";
 "category.alert.delete" = "Удалить";
-"category.action.edit" = "Редактировать";
-"category.action.delete" = "Удалить";
 "newcategory.placeholder" = "Введите название категории";
 "newcategory.savebutton" = "Готово";
 "newcategory.title" = "Новая категория";
