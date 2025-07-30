@@ -17,7 +17,7 @@
 			<key>one</key>
 			<string>%d день</string>
 			<key>few</key>
-			<string>&gt;%d дня</string>
+			<string>%d дня</string>
 			<key>many</key>
 			<string>%d дней</string>
 			<key>other</key>
