@@ -9,6 +9,8 @@ import UIKit
 
 final class FilterTableViewCell: UITableViewCell {
     
+    // MARK: - Private UI Properties
+
     private let containerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
@@ -32,6 +34,8 @@ final class FilterTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    // MARK: - Init
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -43,16 +47,19 @@ final class FilterTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    
     func configure(title: String, isSelected: Bool) {
         titleLabel.text = title
         checkmarkImageView.isHidden = !isSelected
     }
     
+    // MARK: - Private Methods
+    
     private func setupLayout() {
         contentView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(checkmarkImageView)
-        
         
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),

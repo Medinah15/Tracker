@@ -106,6 +106,7 @@ final class TrackerStore: NSObject {
 // MARK: - NSFetchedResultsControllerDelegate
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         try? fetchedResultsController.performFetch()
         updateCategories()
@@ -116,6 +117,7 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
             movedIndexes: []
         ))
     }
+    
     func deleteTracker(_ tracker: Tracker) throws {
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
@@ -130,6 +132,4 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
             delegate?.store(self, didUpdate: TrackerStoreUpdate(insertedIndexes: [], deletedIndexes: [], updatedIndexes: [], movedIndexes: []))
         }
     }
-
-    
 }

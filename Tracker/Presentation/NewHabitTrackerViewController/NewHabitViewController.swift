@@ -15,14 +15,12 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     var onCreate: ((Tracker) -> Void)?
     var selectedTracker: Tracker?
     var isEditingTracker: Bool = false
-    // var completedDaysCount: Int? // если потребуется
-
+    
     // MARK: - Private Properties
     
     var selectedCategory: TrackerCategory?
     
     private var selectedSchedule: [WeekDay] = []
-    
     private let categoryValueLabel = UILabel()
     private let scheduleValueLabel = UILabel()
     private var categoryTitleTopConstraint: NSLayoutConstraint?
@@ -168,12 +166,12 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.largeTitleDisplayMode = .never
         title = isEditingTracker ? "Редактирование привычки" : "Новая привычка"
     }
-
+    
     // MARK: - Public Methods (ScheduleViewControllerDelegate)
     
     func scheduleViewController(_ viewController: ScheduleViewController, didSelectDays selectedDays: [WeekDay]) {
@@ -385,7 +383,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         }
         
         let viewModel = CategoryViewModel(context: context)
-        viewModel.selectedCategory = self.selectedCategory 
+        viewModel.selectedCategory = self.selectedCategory
         
         let categoryVC = CategoryViewController(viewModel: viewModel)
         categoryVC.onCategorySelected = { [weak self] selectedCategory in
@@ -496,7 +494,6 @@ extension NewHabitViewController: UICollectionViewDelegate {
             }
             collectionView.reloadItems(at: indexesToReload)
         }
-        
         validateInput()
     }
 }

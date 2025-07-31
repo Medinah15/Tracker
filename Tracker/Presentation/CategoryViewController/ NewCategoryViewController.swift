@@ -7,8 +7,6 @@
 
 import UIKit
 
-// MARK: - NewCategoryViewController
-
 final class NewCategoryViewController: UIViewController {
     
     // MARK: - Public Properties

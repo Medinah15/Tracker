@@ -6,8 +6,6 @@
 //
 import UIKit
 
-// MARK: - CategoryViewController
-
 final class CategoryViewController: UIViewController {
     
     // MARK: - Public Properties
