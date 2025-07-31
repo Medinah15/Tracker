@@ -102,7 +102,6 @@ final class TrackersViewController: UIViewController {
         
         applyFilter(currentFilter)
         
-        
         view.backgroundColor = .systemBackground
         navigationItem.title = NSLocalizedString("trackers_title", comment: "Title of the Trackers screen")
         navigationItem.largeTitleDisplayMode = .always
@@ -135,6 +134,16 @@ final class TrackersViewController: UIViewController {
     }
     
     // MARK: - Public Methods
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsService.shared.reportEvent(event: "open", screen: "Main")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        AnalyticsService.shared.reportEvent(event: "close", screen: "Main")
+    }
     
     func didRequestEdit(for tracker: Tracker?) {
         guard let tracker = tracker else { return }
@@ -273,6 +282,8 @@ final class TrackersViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapFilterButton() {
+        AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "filter")
+        
         let filterVC = FilterViewController()
         filterVC.selectedFilter = currentFilter
         filterVC.onFilterSelected = { selected in
@@ -289,6 +300,8 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAdd() {
+        AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "add_track")
+        
         let newHabitVC = NewHabitViewController()
         newHabitVC.onCreate = { [weak self] tracker in
             guard let self = self else { return }
@@ -338,6 +351,8 @@ extension TrackersViewController: UICollectionViewDataSource {
             guard let self = self else { return }
             guard !Calendar.current.isDateInFuture(self.selectedDate) else { return }
             guard let trackerRecordStore = self.trackerRecordStore else { return }
+            
+            AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "track")
             
             let isCompleted = trackerRecordStore.isCompleted(tracker.id, on: self.selectedDate)
             
@@ -400,9 +415,11 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
             let tracker = self.categories[indexPath.section].trackers[indexPath.item]
             
             let editAction = UIAction(title: "Редактировать") { _ in
+                AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "edit")
                 self.didRequestEdit(for: tracker)
             }
             let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { _ in
+                AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "delete")
                 self.didRequestDelete(for: tracker)
             }
             return UIMenu(title: "", children: [editAction, deleteAction])

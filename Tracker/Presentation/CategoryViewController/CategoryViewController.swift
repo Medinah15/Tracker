@@ -206,12 +206,14 @@ extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
         let editAction = UIContextualAction(style: .normal, title: "Редактировать") { [weak self] _, _, done in
+            AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "edit")
             self?.showEditCategoryAlert(for: indexPath.row)
             done(true)
         }
         editAction.backgroundColor = .systemBlue
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] _, _, done in
+            AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "delete")
             self?.showDeleteConfirmationAlert(for: indexPath.row)
             done(true)
         }
