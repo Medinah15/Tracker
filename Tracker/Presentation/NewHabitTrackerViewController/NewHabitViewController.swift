@@ -295,14 +295,16 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
             cancelButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
             cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.44),
+            cancelButton.widthAnchor.constraint(equalToConstant: 166),
+
             
             createButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
-            createButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.44),
             createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 8),
-            createButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
+            createButton.widthAnchor.constraint(equalToConstant: 166),
+            createButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            
+
         ])
     }
     

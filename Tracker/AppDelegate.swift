@@ -19,7 +19,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
-        if let configuration = AppMetricaConfiguration(apiKey: "Your_API_Key") {
+        if let configuration = AppMetricaConfiguration(apiKey: "a2171b29-a56b-42eb-ae40-fba55935c332") {
             AppMetrica.activate(with: configuration)
         }
         

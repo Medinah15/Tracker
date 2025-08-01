@@ -348,17 +348,27 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         cell.configure(title: tracker.title, emoji: tracker.emoji, color: tracker.color, isCompleted: isCompleted, count: count)
         cell.onTap = { [weak self] in
+            print("🖱️ Tracker cell tapped for \(tracker.title)")
             guard let self = self else { return }
-            guard !Calendar.current.isDateInFuture(self.selectedDate) else { return }
-            guard let trackerRecordStore = self.trackerRecordStore else { return }
+            guard !Calendar.current.isDateInFuture(self.selectedDate) else {
+                print("📅 Date is in future, ignoring tap")
+                return
+            }
+            
+            guard let trackerRecordStore = self.trackerRecordStore else {
+                print("⚠️ trackerRecordStore is nil")
+                return
+            }
             
             AnalyticsService.shared.reportEvent(event: "click", screen: "Main", item: "track")
             
             let isCompleted = trackerRecordStore.isCompleted(tracker.id, on: self.selectedDate)
             
             if isCompleted {
+                print("🗑 Removing record for tracker \(tracker.title)")
                 try? trackerRecordStore.removeRecord(for: tracker.id, on: self.selectedDate)
             } else {
+                print("➕ Adding record for tracker \(tracker.title)")
                 try? trackerRecordStore.addRecord(for: tracker.id, on: self.selectedDate)
             }
             self.reloadVisibleCategories()

@@ -52,3 +52,5 @@
 "tab.trackers.title" = "Трекеры";
 "tab.statistics.title" = "Статистика";
 "filters_button_title" = "Фильтры";
+"statistics_title" = "Статистика";
+"statistics_placeholder" = "Анализировать пока нечего";

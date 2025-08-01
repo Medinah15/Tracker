@@ -51,3 +51,5 @@
 "tab.trackers.title" = "Trackers";
 "tab.statistics.title" = "Statistics";
 "filters_button_title" = "Filters";
+"statistics_title" = "Statistics";
+"statistics_placeholder" = "Nothing to analyze yet";
