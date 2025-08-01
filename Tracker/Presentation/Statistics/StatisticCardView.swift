@@ -9,15 +9,18 @@ import UIKit
 
 final class StatisticCardView: UIView {
     
+    // MARK: - Private Properties
+    
     private let borderLayer = CAGradientLayer()
-
+    
+    // MARK: - Init
+    
     init(title: String, value: Int) {
         super.init(frame: .zero)
         
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 16
         layer.masksToBounds = true
-        
         layer.addSublayer(borderLayer)
         
         let valueLabel = UILabel()
@@ -37,7 +40,7 @@ final class StatisticCardView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(stack)
-       
+        
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
@@ -46,27 +49,30 @@ final class StatisticCardView: UIView {
             self.heightAnchor.constraint(equalToConstant: 90)
         ])
     }
-
-    override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            borderLayer.frame = bounds
-            borderLayer.cornerRadius = 16
-            borderLayer.borderWidth = 1
-            borderLayer.borderColor = UIColor.clear.cgColor
-            borderLayer.masksToBounds = true
-            
-            borderLayer.colors = [
-                UIColor(red: 253/255, green: 76/255, blue: 73/255, alpha: 1).cgColor,  
-                UIColor(red: 70/255, green: 230/255, blue: 157/255, alpha: 1).cgColor,
-                UIColor(red: 0/255, green: 123/255, blue: 250/255, alpha: 1).cgColor
-            ]
-            
-            borderLayer.startPoint = CGPoint(x: 0, y: 0.5)
-            borderLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Override
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        borderLayer.frame = bounds
+        borderLayer.cornerRadius = 16
+        borderLayer.borderWidth = 1
+        borderLayer.borderColor = UIColor.clear.cgColor
+        borderLayer.masksToBounds = true
+        
+        borderLayer.colors = [
+            UIColor(red: 253/255, green: 76/255, blue: 73/255, alpha: 1).cgColor,  
+            UIColor(red: 70/255, green: 230/255, blue: 157/255, alpha: 1).cgColor,
+            UIColor(red: 0/255, green: 123/255, blue: 250/255, alpha: 1).cgColor
+        ]
+        
+        borderLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        borderLayer.endPoint = CGPoint(x: 1, y: 0.5)
+    }
+}

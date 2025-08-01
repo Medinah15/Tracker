@@ -7,17 +7,14 @@
 import UIKit
 
 final class StatisticsViewController: UIViewController {
-
+    
+    // MARK: - Public Properties
+    
     private let viewModel: StatisticsViewModel
     
-    init(viewModel: StatisticsViewModel) {
-            self.viewModel = viewModel
-            super.init(nibName: nil, bundle: nil)
-        }
-
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+    // MARK: - Private Properties
+    
+    private let stackView = UIStackView()
     
     private let placeholderView: UIView = {
         let view = UIView()
@@ -47,18 +44,20 @@ final class StatisticsViewController: UIViewController {
         ])
         return view
     }()
-
-    private func setupPlaceholderView() {
-        view.addSubview(placeholderView)
-        
-        NSLayoutConstraint.activate([
-            placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+    
+    // MARK: - Init
+    
+    init(viewModel: StatisticsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
-    private let stackView = UIStackView()
-
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -67,18 +66,20 @@ final class StatisticsViewController: UIViewController {
         navigationItem.title = NSLocalizedString("statistics_title", comment: "Title of the Statistics screen")
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
-
+        
         viewModel.onDataChanged = { [weak self] in
             DispatchQueue.main.async {
                 self?.updateUI()
             }
         }
         viewModel.updateStatistics()
-
+        
     }
-
+    
+    // MARK: - Private Methods
+    
     private func setupViews() {
-
+        
         stackView.axis = .vertical
         stackView.spacing = 12
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +91,16 @@ final class StatisticsViewController: UIViewController {
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24)
         ])
     }
-
+    
+    private func setupPlaceholderView() {
+        view.addSubview(placeholderView)
+        
+        NSLayoutConstraint.activate([
+            placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
     private func updateUI() {
         print("⚙️ updateUI called, completedCount = \(viewModel.completedCount)")
         let stats = [
@@ -99,7 +109,7 @@ final class StatisticsViewController: UIViewController {
             ("Трекеров завершено", viewModel.completedCount),
             ("Среднее значение", viewModel.averagePerDay)
         ]
-
+        
         if viewModel.completedCount == 0 {
             placeholderView.isHidden = false
             stackView.isHidden = true
@@ -107,7 +117,7 @@ final class StatisticsViewController: UIViewController {
             placeholderView.isHidden = true
             stackView.isHidden = false
             stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
+            
             for stat in stats {
                 let view = StatisticCardView(title: stat.0, value: stat.1)
                 stackView.addArrangedSubview(view)
