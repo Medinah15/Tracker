@@ -7,8 +7,6 @@
 
 import UIKit
 
-// MARK: - NewCategoryViewController
-
 final class NewCategoryViewController: UIViewController {
     
     // MARK: - Public Properties
@@ -19,7 +17,7 @@ final class NewCategoryViewController: UIViewController {
     
     private let categoryTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("newcategory.placeholder", comment: "Placeholder for new category name")
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
@@ -30,7 +28,7 @@ final class NewCategoryViewController: UIViewController {
     
     private let saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("newcategory.savebutton", comment: "Title for save button on new category screen"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         button.layer.cornerRadius = 16
@@ -44,7 +42,7 @@ final class NewCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Новая категория"
+        title = NSLocalizedString("newcategory.title", comment: "Title for new category screen")
         
         navigationItem.hidesBackButton = true
         

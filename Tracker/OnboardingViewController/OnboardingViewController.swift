@@ -20,8 +20,8 @@ final class OnboardingViewController: UIPageViewController {
     
     lazy var pages: [UIViewController] = {
         [
-            OnboardingPageViewController(backgroundImageName: "blueScreenImage", titleText: "Отслеживайте только то, что хотите"),
-            OnboardingPageViewController(backgroundImageName: "redScreenImage", titleText: "Даже если это не литры воды и йога")
+            OnboardingPageViewController(backgroundImageName: "blueScreenImage", titleText: NSLocalizedString("onboarding.page1.title", comment: "First onboarding screen title")),
+            OnboardingPageViewController(backgroundImageName: "redScreenImage", titleText: NSLocalizedString("onboarding.page2.title", comment: "Second onboarding screen title"))
         ]
     }()
     
@@ -39,7 +39,7 @@ final class OnboardingViewController: UIPageViewController {
     
     private lazy var techButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("onboarding.techbutton.title", comment: "Title for tech button on onboarding"), for: .normal)
         button.backgroundColor = .black
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16

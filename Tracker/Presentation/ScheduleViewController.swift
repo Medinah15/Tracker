@@ -35,7 +35,7 @@ final class ScheduleViewController: UIViewController {
     
     private let doneButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("done", comment: "Button title to finish selecting schedule"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
         button.layer.cornerRadius = 16
@@ -55,7 +55,7 @@ final class ScheduleViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupView() {
-        title = "Расписание"
+        title = NSLocalizedString("schedule", comment: "Title of the schedule screen")
         view.backgroundColor = .white
         navigationItem.hidesBackButton = true
         

@@ -42,14 +42,18 @@ final class TrackerCell: UICollectionViewCell {
         titleLabel.textColor = .white
         emojiLabel.text = emoji
         titleLabel.text = title
-        counterLabel.text = "\(count) дней"
+        let localizedDays = String.localizedStringWithFormat(
+            NSLocalizedString("days_count", comment: "Number of days tracked"),
+            count
+        )
+        counterLabel.text = localizedDays
         updateButtonAppearance(isCompleted: isCompleted, color: color)
     }
     
     // MARK: - Private Methods
     
     private func setupUI() {
-        contentView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        contentView.backgroundColor = .systemBackground
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
         
@@ -58,6 +62,7 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(backgroundCardView)
         
         emojiBackgroundView.layer.cornerRadius = 12
+        emojiBackgroundView.backgroundColor = UIColor(named: "EmojiBackground")
         emojiBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundCardView.addSubview(emojiBackgroundView)
         
@@ -68,16 +73,16 @@ final class TrackerCell: UICollectionViewCell {
         
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         titleLabel.numberOfLines = 2
+        titleLabel.textColor = .white
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         backgroundCardView.addSubview(titleLabel)
         
         counterLabel.font = .systemFont(ofSize: 12)
-        counterLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1)
+        counterLabel.textColor = UIColor(named: "CounterLabelText")
         counterLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(counterLabel)
         
-        actionButton.tintColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        actionButton.backgroundColor = .black
+        actionButton.tintColor = UIColor(named: "Color")
         actionButton.layer.cornerRadius = 17
         actionButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         actionButton.translatesAutoresizingMaskIntoConstraints = false

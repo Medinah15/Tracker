@@ -20,7 +20,7 @@ final class EditCategoryViewController: UIViewController {
     
     private let categoryTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("editcategory.placeholder", comment: "Category text field placeholder")
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
@@ -31,7 +31,7 @@ final class EditCategoryViewController: UIViewController {
     
     private let saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("editcategory.savebutton", comment: "Save button title"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         button.layer.cornerRadius = 16
@@ -57,7 +57,7 @@ final class EditCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Редактирование категории"
+        title = NSLocalizedString("editcategory.title", comment: "Title of Edit category screen")
         navigationItem.hidesBackButton = true
         
         setupViews()

@@ -13,13 +13,14 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     // MARK: - Public Properties
     
     var onCreate: ((Tracker) -> Void)?
+    var selectedTracker: Tracker?
+    var isEditingTracker: Bool = false
     
     // MARK: - Private Properties
     
     var selectedCategory: TrackerCategory?
     
     private var selectedSchedule: [WeekDay] = []
-    
     private let categoryValueLabel = UILabel()
     private let scheduleValueLabel = UILabel()
     private var categoryTitleTopConstraint: NSLayoutConstraint?
@@ -102,7 +103,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("newhabit.nameplaceholder", comment: "Placeholder for new habit name")
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
@@ -131,7 +132,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("newhabit.cancelbutton", comment: "Cancel button title"), for: .normal)
         button.setTitleColor(.systemRed, for: .normal)
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.systemRed.cgColor
@@ -142,7 +143,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private let createButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("newhabit.createbutton", comment: "Create button title"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         button.layer.cornerRadius = 16
@@ -156,12 +157,19 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Новая привычка"
+        title = NSLocalizedString("newhabit.title", comment: "Title of New Habit screen")
         
         setupUI()
         setupConstraints()
         setupActions()
         validateInput()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        title = isEditingTracker ? "Редактирование привычки" : "Новая привычка"
     }
     
     // MARK: - Public Methods (ScheduleViewControllerDelegate)
@@ -191,7 +199,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         
         let text: String
         if selectedDaysSet == allDays {
-            text = "Каждый день"
+            text = NSLocalizedString("newhabit.scheduleeveryday", comment: "Schedule text for every day")
         } else {
             text = days.map { $0.shortTitle }.joined(separator: ", ")
         }
@@ -225,8 +233,8 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         categoryView.translatesAutoresizingMaskIntoConstraints = false
         scheduleView.translatesAutoresizingMaskIntoConstraints = false
         
-        configureSelectionView(title: "Категория", valueLabel: categoryValueLabel, in: categoryView)
-        configureSelectionView(title: "Расписание", valueLabel: scheduleValueLabel, in: scheduleView)
+        configureSelectionView(title: NSLocalizedString("newhabit.category", comment: " "), valueLabel: categoryValueLabel, in: categoryView)
+        configureSelectionView(title: NSLocalizedString("newhabit.schedule", comment: " "), valueLabel: scheduleValueLabel, in: scheduleView)
         
         let catTap = UITapGestureRecognizer(target: self, action: #selector(didTapCategory))
         categoryView.addGestureRecognizer(catTap)
@@ -287,14 +295,16 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
             cancelButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
             cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.44),
+            cancelButton.widthAnchor.constraint(equalToConstant: 166),
+
             
             createButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
-            createButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.44),
             createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 8),
-            createButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
+            createButton.widthAnchor.constraint(equalToConstant: 166),
+            createButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            
+
         ])
     }
     
@@ -375,7 +385,7 @@ final class NewHabitViewController: UIViewController, ScheduleViewControllerDele
         }
         
         let viewModel = CategoryViewModel(context: context)
-        viewModel.selectedCategory = self.selectedCategory 
+        viewModel.selectedCategory = self.selectedCategory
         
         let categoryVC = CategoryViewController(viewModel: viewModel)
         categoryVC.onCategorySelected = { [weak self] selectedCategory in
@@ -454,9 +464,9 @@ extension NewHabitViewController: UICollectionViewDataSource {
             for: indexPath) as! CollectionHeaderView
         
         if collectionView == emojiCollectionView {
-            header.configure(with: "Emoji")
+            header.configure(with: NSLocalizedString("newhabit.sectionemoji", comment: "Emoji section header"))
         } else if collectionView == colorCollectionView {
-            header.configure(with: "Цвет")
+            header.configure(with: NSLocalizedString("newhabit.sectioncolor", comment: "Color section header"))
         }
         return header
     }
@@ -486,7 +496,6 @@ extension NewHabitViewController: UICollectionViewDelegate {
             }
             collectionView.reloadItems(at: indexesToReload)
         }
-        
         validateInput()
     }
 }
